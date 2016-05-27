@@ -180,6 +180,8 @@ subroutine estimate
     do i = 1, n
         trans(i,:) = trans(i,:) / sum(trans(i,:))
     end do
+
+    rewind(input)
 end subroutine estimate
 
 end module estimator

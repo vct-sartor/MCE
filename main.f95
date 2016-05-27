@@ -19,6 +19,7 @@ program mce
 
     use file_handler, only: open_files
     use estimator, only: exploratory_analysis, estimate
+    use reporter, only: report
 
     implicit none
 
@@ -70,7 +71,7 @@ program mce
     call exploratory_analysis
     call estimate
 
-    !call generate_report
+    call report
 
 999 continue
 end program mce

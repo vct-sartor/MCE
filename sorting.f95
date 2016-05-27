@@ -1,5 +1,6 @@
 module sorting
     ! Markov Chain Estimator
+    ! Sorting Module
     ! Victhor S. Sartório
 
     ! Implements a basic insertion sort.
