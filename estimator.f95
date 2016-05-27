@@ -21,8 +21,10 @@ module estimator
 
     implicit none
 
+    private :: find
+
     ! Sample size
-    integer, save :: n
+    integer, save :: ss
     ! State space
     integer, allocatable, save :: space(:)
     ! Probability vector and Transition matrix
@@ -50,6 +52,8 @@ subroutine exploratory_analysis
 
     integer :: ioerr
     character(len=128) :: iomsg
+
+    write (*, "('Exploratory step...')")
 
     allocate(uniques(bufsize))
     unique_count = 0
@@ -101,8 +105,81 @@ subroutine exploratory_analysis
     allocate(space(unique_count))
     space = uniques(1:unique_count)
     deallocate(uniques)
-    n = count
+    ss = count
     call iisort(space)
+
+    rewind(input)
 end subroutine exploratory_analysis
+
+pure function find(x, v)
+    ! Returns the index of the first occurrence of x in the vector
+    ! v. If there is no ocurrence, it returns 0.
+
+    implicit none
+
+    integer :: find
+
+    integer, intent(in) :: x, v(:)
+    integer :: i
+
+    do i = 1, size(v)
+        if (v(i) .eq. x) then
+            find = i
+            return
+        end if
+    end do
+
+    find = 0    
+end function find
+
+subroutine estimate
+    ! Side-effects: Fills the saved variables referent to the
+    ! transition matrix and probability vector.
+
+    ! Specification: Assumues the saved variables referent to the
+    ! sample space and sample size do be properly set with meaningful
+    ! values.
+
+    ! Specification: As per the module specification, expects the
+    ! input cursor to be at the beginning of the file and at the
+    ! return point rewinds it.
+
+    implicit none
+
+    integer :: i, j, n, vold, vcur, iold, icur
+
+    write (*, "('Etimation step...')")
+
+    n = size(space)
+
+    allocate(probs(n))
+    allocate(trans(n,n))
+
+    do i = 1, n
+        probs(i) = 0
+        trans(i,:) = (/ (0, j=1,n) /)
+    end do
+
+    read (input, "(I12)") vcur
+    icur = find(vcur, space)
+    probs(icur) = probs(icur) + 1
+
+    do i = 2, ss
+        vold = vcur
+        iold = icur
+
+        read (input, "(I12)") vcur
+        icur = find(vcur, space)
+
+        trans(iold,icur) = trans(iold,icur) + 1
+        probs(icur) = probs(icur) + 1
+    end do
+
+    probs = probs / sum(probs)
+
+    do i = 1, n
+        trans(i,:) = trans(i,:) / sum(trans(i,:))
+    end do
+end subroutine estimate
 
 end module estimator

@@ -18,7 +18,7 @@ program mce
     ! 100 - No input files
 
     use file_handler, only: open_files
-    use estimator, only: exploratory_analysis
+    use estimator, only: exploratory_analysis, estimate
 
     implicit none
 
@@ -68,6 +68,9 @@ program mce
     call open_files(input_path, output_path)
 
     call exploratory_analysis
+    call estimate
+
+    !call generate_report
 
 999 continue
 end program mce
