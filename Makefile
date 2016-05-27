@@ -22,7 +22,7 @@ estimator.o: estimator.f95 file_handler.mod sorting.mod
 
 reporter.mod: reporter.o
 
-reporter.o: reporter.f95 file_handler.mod
+reporter.o: reporter.f95 estimator.mod file_handler.mod
 	$(FC) $(FF) -c reporter.f95
 
 sorting.mod: sorting.o
