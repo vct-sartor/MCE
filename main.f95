@@ -24,7 +24,7 @@ program mce
     implicit none
 
     character(len=64), parameter :: version_str = &
-        "Markov Chain Estimator v0.1.1 - Victhor S. Sartório"
+        "Markov Chain Estimator v0.2.0 - Victhor S. Sartório"
     character(len=64), parameter :: help_str = &
         "Usage: mce input_file [output_file]"
 
