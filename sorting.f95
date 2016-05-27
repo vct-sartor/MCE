@@ -12,10 +12,8 @@ contains
 subroutine iisort(a)
     implicit none
     
-    integer, allocatable, intent(inout) :: a(:)
+    integer, intent(inout) :: a(:)
     integer :: i, j, p
-
-    if (.not. allocated(a)) error stop 999
 
     do i = 2, size(a)
         p = a(i)
