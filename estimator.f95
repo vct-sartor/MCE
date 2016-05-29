@@ -147,6 +147,7 @@ subroutine estimate
     implicit none
 
     integer :: i, j, n, vold, vcur, iold, icur
+    double precision, allocatable :: tmp(:)
 
     write (*, "('Etimation step...')")
 
@@ -154,6 +155,7 @@ subroutine estimate
 
     allocate(probs(n))
     allocate(trans(n,n))
+    allocate(tmp(n))
 
     do i = 1, n
         probs(i) = 0
@@ -178,7 +180,12 @@ subroutine estimate
     probs = probs / sum(probs)
 
     do i = 1, n
-        trans(i,:) = trans(i,:) / sum(trans(i,:))
+        tmp = trans(i, :)
+        if (sum(tmp) .gt. 0) then
+            trans(i,:) = tmp / sum(tmp)
+        else
+            trans(i,:) = 1d0 / real(n, kind=8)
+        end if
     end do
 
     rewind(input)
