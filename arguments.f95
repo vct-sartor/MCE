@@ -20,7 +20,7 @@ module arguments
     implicit none
 
     character(len=52), private, parameter :: version_str = &
-        "Markov Chain Estimator v0.2.1 - Victhor S. Sartório"
+        "Markov Chain Estimator v0.2.2 - Victhor S. Sartório"
     character(len=69), private, parameter :: help_str =    &
         "Usage: mce [-v|-h|input_file] [-ooutput_file] [-fabsorbent|-funiform]"
 

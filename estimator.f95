@@ -10,11 +10,17 @@ module estimator
     ! the beginning of the file and at the return point they should
     ! rewind it.
 
+    ! Specification: If the last observed value is unique, the
+    ! default behavior is to warn the user to use a specific
+    ! behavior flag.
+
     ! Error codes:
     ! 220 - Failure while parsing file
     ! 240 - Expected to use unallocated variable
     ! 320 - Invalid sample size
+    ! 340 - Edge case met without specification
 
+    use arguments, only: f_absorbent, f_uniform
     use iso_fortran_env, only: iostat_end
     use sorting, only: iisort
     use file_handler, only: input
@@ -181,21 +187,14 @@ subroutine estimate
         if (sum(trans(i,:)) .gt. 0) then
             trans(i,:) = trans(i,:) / sum(trans(i,:))
         else
-            ! This is actually problematic.
-            ! There seems to be no standard way of handling this so
-            ! for now this is a fix. I'll implement an argument module
-            ! anyway, and then I'll allow to specify what behavior
-            ! this edge case should have.
-            ! This approach could make some subsets of states lose a
-            ! transient property, but making it an absorbent state
-            ! could also lead to making recurrent states transient.
-            ! And I don't like the idea of pretending this entry
-            ! doesn't exist.
-            ! TODO: FIX
-            ! After implementing the arguments module, make the
-            ! default throw a warning if no behavior was specified
-            !and otherwise, follow specified behavior.
-            trans(i,:) = 1d0 / real(n, kind=8)
+            if (f_uniform) then
+                trans(i,:) = 1d0 / real(n, kind=8)
+            else if (f_absorbent) then
+                trans(i,i) = 1
+            else
+                write (*, "('mce: edge case met without a -f argument set')")
+                error stop 340
+            end if
         end if
     end do
 
