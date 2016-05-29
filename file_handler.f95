@@ -40,7 +40,7 @@ subroutine open_files
          action = "read", iostat = ioerr, iomsg = iomsg)
 
     if (ioerr .ne. 0) then
-        write (*, "(A, /, A)") "mce: invalid output file", trim(iomsg)
+        write (*, "('mce: invalid input file', /, A)") trim(iomsg)
         error stop 160
     end if
 
@@ -48,7 +48,7 @@ subroutine open_files
          iostat = ioerr, iomsg = iomsg)
 
     if (ioerr .ne. 0) then
-        write (*, "(A, /, A)") "mce: invalid output file", trim(iomsg)
+        write (*, "('mce: invalid output file', /, A)") trim(iomsg)
         error stop 180
     end if
     

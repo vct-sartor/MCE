@@ -10,6 +10,8 @@ module sorting
 contains
 
 subroutine iisort(a)
+    ! Insertion sort on an integer array
+
     implicit none
     
     integer, intent(inout) :: a(:)

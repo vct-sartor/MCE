@@ -64,17 +64,19 @@ subroutine parse_arguments
         select case (arg(1:2))
         case ("-o")
             output_path = arg(3:)
+
         case ("-f")
             if (trim(arg(3:)) .eq. "absorbent") then
                 f_absorbent = .true.
                 f_uniform = .false.
-            elseif (trim(arg(3:)) .eq. "uniform") then
+            else if (trim(arg(3:)) .eq. "uniform") then
                 f_absorbent = .false.
                 f_uniform = .true.
             else
                 write (*, "('mce: expected [-funiform|-fabsorbent], got ', A)") trim(arg)
                 error stop 120
             end if
+            
         end select
     end do
 end subroutine parse_arguments
