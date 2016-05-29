@@ -3,7 +3,7 @@
 FC=gfortran
 FF=-O2 -march=native -Wall -Wextra -Wpedantic
 
-OBJS=file_handler.o sorting.o reporter.o estimator.o main.o
+OBJS=arguments.o file_handler.o sorting.o reporter.o estimator.o main.o
 
 # Build system
 
@@ -32,8 +32,13 @@ sorting.o: sorting.f95
 
 file_handler.mod: file_handler.o
 
-file_handler.o: file_handler.f95
+file_handler.o: file_handler.f95 arguments.mod
 	$(FC) $(FF) -c file_handler.f95
+
+arguments.mod: arguments.o
+
+arguments.o: arguments.f95
+	$(FC) $(FF) -c arguments.f95
 
 # Utilities
 
