@@ -181,6 +181,20 @@ subroutine estimate
         if (sum(trans(i,:)) .gt. 0) then
             trans(i,:) = trans(i,:) / sum(trans(i,:))
         else
+            ! This is actually problematic.
+            ! There seems to be no standard way of handling this so
+            ! for now this is a fix. I'll implement an argument module
+            ! anyway, and then I'll allow to specify what behavior
+            ! this edge case should have.
+            ! This approach could make some subsets of states lose a
+            ! transient property, but making it an absorbent state
+            ! could also lead to making recurrent states transient.
+            ! And I don't like the idea of pretending this entry
+            ! doesn't exist.
+            ! TODO: FIX
+            ! After implementing the arguments module, make the
+            ! default throw a warning if no behavior was specified
+            !and otherwise, follow specified behavior.
             trans(i,:) = 1d0 / real(n, kind=8)
         end if
     end do
