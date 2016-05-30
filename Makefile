@@ -3,7 +3,8 @@
 FC=gfortran
 FF=-O2 -march=native -Wall -Wextra -Wpedantic
 
-OBJS=arguments.o file_handler.o sorting.o reporter.o estimator.o main.o
+OBJS=arguments.o file_handler.o sorting.o reporter.o \
+	 estimator.o simulator.o main.o
 
 # Build system
 
@@ -12,8 +13,13 @@ all: mce
 mce: $(OBJS)
 	$(FC) $(FF) -o mce $(OBJS)
 
-main.o: main.f95 file_handler.mod estimator.mod reporter.mod
+main.o: main.f95 file_handler.mod estimator.mod reporter.mod simulator.mod
 	$(FC) $(FF) -c main.f95
+
+simulator.mod: simulator.o
+
+simulator.o: simulator.f95 file_handler.mod estimator.mod
+	$(FC) $(FF) -c simulator.f95
 
 estimator.mod: estimator.o
 
@@ -22,7 +28,7 @@ estimator.o: estimator.f95 arguments.mod file_handler.mod sorting.mod
 
 reporter.mod: reporter.o
 
-reporter.o: reporter.f95 estimator.mod file_handler.mod
+reporter.o: reporter.f95 estimator.mod file_handler.mod simulator.mod
 	$(FC) $(FF) -c reporter.f95
 
 sorting.mod: sorting.o

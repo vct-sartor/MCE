@@ -1,0 +1,7 @@
+-> Documment all argument options.
+-> Add option -scont so that the zeroth step from the
+   simulation standpoint is actually the last observation, instead of
+   a random number.
+-> Add option -sn[value] to simulate 'value' different sets of
+   observations.
+-> Add option -sseed[value] to set a seed to the simulation.

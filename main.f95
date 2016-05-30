@@ -10,6 +10,7 @@ program mce
     use arguments, only: parse_arguments
     use file_handler, only: open_files
     use estimator, only: exploratory_analysis, estimate
+    use simulator, only: simulate
     use reporter, only: report
 
     implicit none
@@ -20,6 +21,8 @@ program mce
 
     call exploratory_analysis
     call estimate
+
+    call simulate
 
     call report
 end program mce

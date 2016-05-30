@@ -6,8 +6,10 @@ module reporter
     ! This module implements the subroutine responsible for writing
     ! the results into the output files.
 
+    use arguments, only: s_vprint
     use file_handler, only: output
     use estimator, only: ss, space, probs, trans
+    use simulator, only: simulation
 
     implicit none
 
@@ -30,6 +32,8 @@ subroutine report
 
     n = size(space)
     
+    ! Exploratory step
+
     write (output, "('c   Markov Chain Estimator - Inference Report', /,&
                     &'c   Victhor S. Sartório', /,&
                     &'c   Sample size', /, '    ', I0, /,&
@@ -38,6 +42,8 @@ subroutine report
     write (vfmt, "('(''  ''', I0, '(''  '', I0))')") n
 
     write (output, vfmt) space
+
+    ! Estimation step
 
     write (vfmt, "('(', I0, '(''    '', F12.10))')") n
 
@@ -48,6 +54,20 @@ subroutine report
     do i = 1, n
         write (output, vfmt) trans(i,:)
     end do
+
+    ! Simulation step
+
+    write (output, "('c   Simulation')")
+
+    if (s_vprint) then
+        do i = 1, size(simulation)
+            write (output, "('    ', I0)") simulation(i)
+        end do
+    else
+        write (vfmt, "('(', I0, '(''    '', I0))')") size(simulation)
+        write (output, vfmt) simulation
+    end if
+
 end subroutine report
 
 end module reporter
